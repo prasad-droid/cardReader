@@ -24,22 +24,6 @@ export default function Contact({route}) {
 
   console.log('test website',route.params)
 
-  const updatedData = useEffect(() => {
-    const setdata = () => {
-      setName(route.params?.name);
-      setJob(route.params?.job);
-      setWebsite(route.params?.website[0]);
-      setContact1(route.params?.contact1);
-      setEmail(route.params?.email[0]);
-    };
-    setdata();
-  }, [
-    route.params?.name,
-    route.params?.job,
-    route.params?.website,
-    route.params?.contact1,
-    route.params?.email,
-  ]);
 
   const SaveData = contact => {
     const contactDetails = {
