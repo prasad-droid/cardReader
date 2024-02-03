@@ -4,7 +4,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
-import {DataProvider} from './screens/Context';
 import FirstScreen from './screens/FirstScreen';
 import Home from './screens/Home';
 import Contact from './screens/Contact';
@@ -110,9 +109,7 @@ export function MainContainer() {
   return (
     <>
       <NavigationContainer>
-        <DataProvider>
           <Stack.Navigator>{Screen}</Stack.Navigator>
-        </DataProvider>
       </NavigationContainer>
     </>
   );

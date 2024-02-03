@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef} from 'react';
-import {useData} from './Context';
 import Button from './Button';
+import {collection, addDoc} from 'firebase/firestore';
 
 export default function Contact({route}) {
   const navigation = useNavigation();
@@ -22,17 +22,21 @@ export default function Contact({route}) {
   const [email, setEmail] = useState(null);
   const {addContact} = useData();
 
-  console.log('test website',route.params)
+  console.log('test website', route.params);
 
-
-  const SaveData = contact => {
-    const contactDetails = {
-      name: name,
-      job: job,
-      website: website,
-      contact1: contact1,
-      email: email,
-    };
+  const SaveData = async () => {
+    try {
+      const docRef = await addDoc(collection(db, 'users'), {
+        name: name,
+        job: job,
+        website: website,
+        contact1: contact1,
+        email: email,
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
 
     addContact(contactDetails);
     setName('');
@@ -40,7 +44,7 @@ export default function Contact({route}) {
     setWebsite('');
     setContact1('');
     setEmail('');
-    alert("Contact Saved ")
+    alert('Contact Saved ');
     navigation.navigate('Home');
   };
 
@@ -49,7 +53,12 @@ export default function Contact({route}) {
       <View style={styles.container}>
         <Image
           source={require('../assets/profile.png')}
-          style={{width: 200, height: 200,alignSelf:'center',objectFit:'contain'}}
+          style={{
+            width: 200,
+            height: 200,
+            alignSelf: 'center',
+            objectFit: 'contain',
+          }}
         />
         <ScrollView>
           <View style={styles.inputBox}>
@@ -57,7 +66,9 @@ export default function Contact({route}) {
               placeholder="Name"
               style={styles.inputStyle}
               value={name ? name : ''}
-              onChangeText={(text)=>{setName(text)}}
+              onChangeText={text => {
+                setName(text);
+              }}
             />
           </View>
           <View style={styles.inputBox}>
@@ -65,15 +76,19 @@ export default function Contact({route}) {
               placeholder="Job"
               style={styles.inputStyle}
               value={job ? job : ''}
-              onChangeText={(text)=>{setJob(text)}}
+              onChangeText={text => {
+                setJob(text);
+              }}
             />
           </View>
           <View style={styles.inputBox}>
             <TextInput
               placeholder="website "
               style={styles.inputStyle}
-              value={website? website : ''}
-              onChangeText={(text)=>{setWebsite(text)}}
+              value={website ? website : ''}
+              onChangeText={text => {
+                setWebsite(text);
+              }}
             />
           </View>
           <View style={styles.inputBox}>
@@ -81,7 +96,9 @@ export default function Contact({route}) {
               placeholder="Contact 1"
               style={styles.inputStyle}
               value={contact1}
-              onChangeText={(text)=>{setContact1(text)}}
+              onChangeText={text => {
+                setContact1(text);
+              }}
             />
           </View>
           <View style={styles.inputBox}>
@@ -89,7 +106,9 @@ export default function Contact({route}) {
               placeholder="Email"
               style={styles.inputStyle}
               value={email}
-              onChangeText={(text)=>{setEmail(text)}}
+              onChangeText={text => {
+                setEmail(text);
+              }}
             />
           </View>
         </ScrollView>

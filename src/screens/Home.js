@@ -6,13 +6,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Card from './Card';
-import { useData } from './Context';  
+import { db } from '../firebaseConfig';
 
 
 export default function Home() {
   
-  const { contactData } = useData();
-  console.log(contactData);
+  console.log(usersCollection);
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
