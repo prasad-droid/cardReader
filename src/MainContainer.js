@@ -26,20 +26,23 @@ const scanTab = 'Scan';
 const contactTab = 'Contact';
 
 export function MainContainer() {
+  let Screen;
   const [loggedIn, setloggedIn] = useState(false);
+  // check wheater user is loggedIn
   const isLoggedIn = useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, user => {
-      console.log(user);
       setloggedIn(user);
     });
   }, []);
 
+  // Log out btn
   const logout = ()=>{
     alert("User Logged Out")
     FIREBASE_AUTH.signOut()
   }
 
-  const MainApp = () => {
+  // Main Application
+  const MainApp = ({route}) => {
     return (
       <Tab.Navigator
         initialRouteName={homeTab}
@@ -62,18 +65,20 @@ export function MainContainer() {
               text="Logout"
               color="#fff"
             />
-          ),
+            ),
+            
           // headerShown:false
         })
         
         }>
-        <Tab.Screen name={homeTab} component={Home} />
-        <Tab.Screen name={scanTab} component={Scan} />
-        <Tab.Screen name={contactTab} component={Contact} />
+        <Tab.Screen name={homeTab} component={Home} initialParams={route.params} />
+        <Tab.Screen name={scanTab} component={Scan} initialParams={route.params} />
+        <Tab.Screen name={contactTab} component={Contact}  initialParams={route.params}/>
       </Tab.Navigator>
     );
   };
-  let Screen;
+  
+  // set screen if user is logged in
   {
     loggedIn
       ? (Screen = (
@@ -82,6 +87,7 @@ export function MainContainer() {
               name="main"
               component={MainApp}
               options={{headerShown:false}}
+              initialParams={loggedIn}
               />
           </Stack.Group>
         ))
@@ -114,8 +120,4 @@ export function MainContainer() {
     </>
   );
 }
-{
-  /* <Stack.Screen name=" " component={FirstScreen} options={{ headerShown: false }} />
-<Stack.Screen name={login} component={LoginRegister} />
-<Stack.Screen name="CX Card Scan" component={MainApp} /> */
-}
+

@@ -4,41 +4,46 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  ScrollView,
+  KeyboardAvoidingView,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef} from 'react';
 import Button from './Button';
 import {collection, addDoc} from 'firebase/firestore';
+import {db} from '../firebaseConfig';
 
 export default function Contact({route}) {
   const navigation = useNavigation();
-
-  const [name, setName] = useState(null);
+  console.log("askjdhsajd" + JSON.stringify(route));
+  const [name, setName] = useState();
   const [job, setJob] = useState(null);
   const [website, setWebsite] = useState(null);
   const [contact1, setContact1] = useState(null);
   const [email, setEmail] = useState(null);
-  const {addContact} = useData();
 
-  console.log('test website', route.params);
+  
+  const user =db;
 
+  console.log(user);
   const SaveData = async () => {
     try {
       const docRef = await addDoc(collection(db, 'users'), {
-        name: name,
-        job: job,
-        website: website,
-        contact1: contact1,
-        email: email,
+        user: {
+          name: name,
+          job: job,
+          website: website,
+          contact1: contact1,
+          email: email,
+        },
       });
       console.log('Document written with ID: ', docRef.id);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
 
-    addContact(contactDetails);
+    // addContact(contactDetails);
     setName('');
     setJob('');
     setWebsite('');
@@ -47,7 +52,7 @@ export default function Contact({route}) {
     alert('Contact Saved ');
     navigation.navigate('Home');
   };
-
+  
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
@@ -65,7 +70,7 @@ export default function Contact({route}) {
             <TextInput
               placeholder="Name"
               style={styles.inputStyle}
-              value={name ? name : ''}
+              value={name}
               onChangeText={text => {
                 setName(text);
               }}

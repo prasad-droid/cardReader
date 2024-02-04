@@ -6,21 +6,19 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Card from './Card';
-import { db } from '../firebaseConfig';
 
 
 export default function Home() {
   
-  console.log(usersCollection);
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <ImageBackground source={require('../assets/appicon.png')} resizeMode="contain" style={styles.image}>
           <ScrollView style={styles.ScrollView} vertical={true} >
             {
-              contactData.map((element)=>{
-                return <Card key={element.contact1} Cname={element.name} email={element.email} Contact={element.contact1} all={element}/>
-              })
+              // contactData.map((element)=>{
+              //   return <Card key={element.contact1} Cname={element.name} email={element.email} Contact={element.contact1} all={element}/>
+              // })
             }
           </ScrollView>
         </ImageBackground>
