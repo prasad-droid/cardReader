@@ -20,7 +20,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
-  
+
   const navigation = useNavigation();
   const handleSubmit = async ()=>{
     setLoading(true)
@@ -62,7 +62,7 @@ export default function Login() {
             <Button text={'Login'} onPress={handleSubmit}></Button>
           </>
         )}
-        <TouchableOpacity onPress={()=>{navigation.navigate('Register')}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Register')}} style={{color:'black'}}>
           <Text>Not a User ?</Text>
         </TouchableOpacity>
       </View>

@@ -1,9 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect,useContext,createContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
+import {FIREBASE_AUTH} from './firebaseConfig';
+import {onAuthStateChanged} from 'firebase/auth';
+import {DataContext} from './screens/Context'
+// Screens
 import FirstScreen from './screens/FirstScreen';
 import Home from './screens/Home';
 import Contact from './screens/Contact';
@@ -11,13 +14,14 @@ import Scan from './screens/Scan';
 import Login from './screens/login';
 import Button from './screens/Button';
 import Register from './screens/Register';
-import {FIREBASE_AUTH} from './firebaseConfig';
-import {onAuthStateChanged} from 'firebase/auth';
 
+
+// constructor( initalization )
 const auth = FIREBASE_AUTH;
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+// Screen Names
 const firstScreen = 'first';
 const loginScreen = 'Login';
 const RegisterScreen = 'Register';
@@ -71,9 +75,9 @@ export function MainContainer() {
         })
         
         }>
-        <Tab.Screen name={homeTab} component={Home} initialParams={route.params} />
-        <Tab.Screen name={scanTab} component={Scan} initialParams={route.params} />
-        <Tab.Screen name={contactTab} component={Contact}  initialParams={route.params}/>
+        <Tab.Screen name={homeTab} component={Home}  />
+        <Tab.Screen name={scanTab} component={Scan}  />
+        <Tab.Screen name={contactTab} component={Contact}  />
       </Tab.Navigator>
     );
   };
@@ -114,9 +118,11 @@ export function MainContainer() {
 
   return (
     <>
+    <DataContext.Provider value={loggedIn}>
       <NavigationContainer>
           <Stack.Navigator>{Screen}</Stack.Navigator>
       </NavigationContainer>
+    </DataContext.Provider>
     </>
   );
 }

@@ -71,7 +71,7 @@ import {
               <Button text={'Register'} onPress={handleSubmit}></Button>
             </>
           )}
-          <TouchableOpacity onPress={()=>{navigation.navigate('Login')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Login')}} style={{color:'black'}}>
             <Text>Already a User ?</Text>
           </TouchableOpacity>
         </View>

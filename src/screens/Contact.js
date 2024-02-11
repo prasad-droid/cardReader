@@ -1,58 +1,69 @@
 import {
-  Text,
   View,
   Image,
   TextInput,
   StyleSheet,
-  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import Button from './Button';
-import {collection, addDoc} from 'firebase/firestore';
+import {collection, addDoc, doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
 import {db} from '../firebaseConfig';
+import {DataContext} from './Context';
 
 export default function Contact({route}) {
   const navigation = useNavigation();
-  console.log("askjdhsajd" + JSON.stringify(route));
-  const [name, setName] = useState();
-  const [job, setJob] = useState(null);
-  const [website, setWebsite] = useState(null);
-  const [contact1, setContact1] = useState(null);
-  const [email, setEmail] = useState(null);
+  const [name, setName] = useState(route.params?.name);
+  const [job, setJob] = useState(route.params?.job);
+  const [website, setWebsite] = useState(route.params?.website);
+  const [contact1, setContact1] = useState(route.params?.contact1);
+  const [email, setEmail] = useState(route.params?.email);
+  const user = useContext(DataContext);
+  const [loading, setLoading] = useState(false);
 
-  
-  const user =db;
-
-  console.log(user);
   const SaveData = async () => {
+    const userEmail = user.email;
+    const docRef = doc(db, "users", userEmail); // docReference
+    setLoading(true)
     try {
-      const docRef = await addDoc(collection(db, 'users'), {
-        user: {
-          name: name,
-          job: job,
-          website: website,
-          contact1: contact1,
-          email: email,
-        },
-      });
-      console.log('Document written with ID: ', docRef.id);
+      const docSnap = await getDoc(docRef); //getting data
+      let contact = {
+        "name":name?name:'',
+        "job":job?job:'',
+        "website":website?website:'',
+        "contact1":contact1?contact1:'',
+        "email" : email?email:'',
+        "time": Timestamp.now()
+      }
+      
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data()['contacts']);
+        const prevData = docSnap.data()['contacts']
+        // setDoc(doc(collection(db,'collectionName'), documentID),{key:value}
+        
+        console.log(prevData);
+        await setDoc(doc(collection(db,'users'), userEmail), {"contacts": [...prevData,contact]})
+      } else {
+        await setDoc(doc(collection(db,'users'), userEmail), {"contacts": [contact]});
+      }
+      console.log('Contact Saved');
+      //clear fields
+      setName('');
+      setJob('');
+      setWebsite('');
+      setContact1('');
+      setEmail('');
+      navigation.navigate('Home');
     } catch (e) {
       console.error('Error adding document: ', e);
+    }finally{
+      setLoading(false)
     }
-
-    // addContact(contactDetails);
-    setName('');
-    setJob('');
-    setWebsite('');
-    setContact1('');
-    setEmail('');
-    alert('Contact Saved ');
-    navigation.navigate('Home');
   };
-  
+
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
@@ -118,7 +129,13 @@ export default function Contact({route}) {
           </View>
         </ScrollView>
         <View style={styles.btnDiv}>
-          <Button text="save" icon="save" onPress={SaveData} />
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <>
+            <Button text="save" icon="save" onPress={SaveData} />
+          </>
+        )}
           <Button
             text="repeat"
             icon="repeat"
@@ -126,8 +143,7 @@ export default function Contact({route}) {
               navigation.navigate('Scan');
             }}
           />
-          {/* <Button iconName={'save'} style={styles.Button} size={20}></Button>
-          <Button iconName={'repeat'} style={styles.Button} size={20}></Button>  */}
+          
         </View>
       </View>
     </SafeAreaView>
