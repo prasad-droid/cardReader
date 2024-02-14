@@ -1,12 +1,14 @@
-import {useState, useEffect,useContext,createContext} from 'react';
+import {useState, useEffect, useContext, createContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import {FIREBASE_AUTH} from './firebaseConfig';
 import {onAuthStateChanged} from 'firebase/auth';
-import {DataContext} from './screens/Context'
+import {DataContext} from './screens/Context';
+
 // Screens
+import {SideBar,Drawer} from './screens/SideBar';
 import FirstScreen from './screens/FirstScreen';
 import Home from './screens/Home';
 import Contact from './screens/Contact';
@@ -14,7 +16,6 @@ import Scan from './screens/Scan';
 import Login from './screens/login';
 import Button from './screens/Button';
 import Register from './screens/Register';
-
 
 // constructor( initalization )
 const auth = FIREBASE_AUTH;
@@ -40,10 +41,10 @@ export function MainContainer() {
   }, []);
 
   // Log out btn
-  const logout = ()=>{
-    alert("User Logged Out")
-    FIREBASE_AUTH.signOut()
-  }
+  const logout = () => {
+    alert('User Logged Out');
+    FIREBASE_AUTH.signOut();
+  };
 
   // Main Application
   const MainApp = ({route}) => {
@@ -64,24 +65,18 @@ export function MainContainer() {
             return <Icon name={iconName} size={size} color="black" />;
           },
           headerRight: () => (
-            <Button
-              onPress={logout}
-              text="Logout"
-              color="#fff"
-            />
-            ),
-            
+            <Button onPress={logout} text="Logout" color="#fff" />
+          ),
+
           // headerShown:false
-        })
-        
-        }>
-        <Tab.Screen name={homeTab} component={Home}  />
-        <Tab.Screen name={scanTab} component={Scan}  />
-        <Tab.Screen name={contactTab} component={Contact}  />
+        })}>
+        <Tab.Screen name={homeTab} component={Home} />
+        <Tab.Screen name={scanTab} component={Scan} />
+        <Tab.Screen name={contactTab} component={Contact} />
       </Tab.Navigator>
     );
   };
-  
+
   // set screen if user is logged in
   {
     loggedIn
@@ -90,9 +85,9 @@ export function MainContainer() {
             <Stack.Screen
               name="main"
               component={MainApp}
-              options={{headerShown:false}}
+              options={{headerShown: false}}
               initialParams={loggedIn}
-              />
+            />
           </Stack.Group>
         ))
       : (Screen = (
@@ -118,12 +113,13 @@ export function MainContainer() {
 
   return (
     <>
-    <DataContext.Provider value={loggedIn}>
-      <NavigationContainer>
-          <Stack.Navigator>{Screen}</Stack.Navigator>
-      </NavigationContainer>
-    </DataContext.Provider>
+      <DataContext.Provider value={loggedIn}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {Screen}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </DataContext.Provider>
     </>
   );
 }
-

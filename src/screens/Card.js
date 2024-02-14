@@ -40,9 +40,9 @@ export default function Card({Cname, email, Contact}) {
         style={styles.image}
       />
       <View style={styles.content}>
-        <Text style={styles.text}>{Cname}</Text>
-        <Text style={styles.text}>{Contact}</Text>
-        <Text style={styles.text}>{email}</Text>
+        <Text style={styles.text}>Name : {Cname}</Text>
+        <Text style={styles.text}>Contact : {Contact}</Text>
+        <Text style={styles.text}>Email : {email}</Text>
       </View>
       <View style={styles.btnDiv}>
         <Button

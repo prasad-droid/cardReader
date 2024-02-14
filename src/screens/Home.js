@@ -1,26 +1,61 @@
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
   ImageBackground,
   SafeAreaView,
 } from 'react-native';
+import { doc, getDoc } from 'firebase/firestore';
+import { DataContext } from './Context';
 import Card from './Card';
-
+import { db } from '../firebaseConfig';
 
 export default function Home() {
-  
+  const user = useContext(DataContext);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docRef = doc(db, 'users', user.email);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log('Document data:', docSnap.data());
+          setData(docSnap.data());
+        } else {
+          console.log('No such document!');
+          setError('No data found in Firestore');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data from Firestore');
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
-        <ImageBackground source={require('../assets/appicon.png')} resizeMode="contain" style={styles.image}>
-          <ScrollView style={styles.ScrollView} vertical={true} >
-            {
-              // contactData.map((element)=>{
-              //   return <Card key={element.contact1} Cname={element.name} email={element.email} Contact={element.contact1} all={element}/>
-              // })
-            }
-          </ScrollView>
+        <ImageBackground
+          source={require('../assets/appicon.png')}
+          resizeMode="contain"
+          style={styles.image}>
+          {data && data.contacts && data.contacts.length > 0 ? (
+            <ScrollView style={styles.scrollView} vertical={true}>
+              {data.contacts.map((contact, index) => (
+                <Card key={index} Cname={contact.name} email={contact.email} Contact={contact.contact1}  />
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.emptyText}>Empty Directory</Text>
+          )}
+          {error && <Text style={styles.errorText}>Error: {error}</Text>}
         </ImageBackground>
       </View>
     </SafeAreaView>
@@ -36,23 +71,24 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
-  ScrollView:{
-    backgroundColor:"#00000070",
+  scrollView: {
+    backgroundColor: '#00000070',
     paddingHorizontal: 10,
   },
-  Button: {
-    padding: 25,
+  emptyText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   },
   image: {
     flex: 1,
     justifyContent: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 42,
-    lineHeight: 84,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#000000c0',
   },
 });

@@ -10,7 +10,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import Button from './Button';
-import {collection, addDoc, doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
+import {collection,doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
 import {db} from '../firebaseConfig';
 import {DataContext} from './Context';
 
