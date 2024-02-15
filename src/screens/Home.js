@@ -12,9 +12,10 @@ import { DataContext } from './Context';
 import Card from './Card';
 import { db } from '../firebaseConfig';
 
-export default function Home() {
+export default  Home = () => {
   const user = useContext(DataContext);
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,6 +34,8 @@ export default function Home() {
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data from Firestore');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -46,7 +49,11 @@ export default function Home() {
           source={require('../assets/appicon.png')}
           resizeMode="contain"
           style={styles.image}>
-          {data && data.contacts && data.contacts.length > 0 ? (
+          {loading ? (
+            <Text style={styles.emptyText}>Loading...</Text>
+          ) : error ? (
+            <Text style={styles.errorText}>Error: {error}</Text>
+          ) : data && data.contacts && data.contacts.length > 0 ? (
             <ScrollView style={styles.scrollView} vertical={true}>
               {data.contacts.map((contact, index) => (
                 <Card key={index} Cname={contact.name} email={contact.email} Contact={contact.contact1}  />
@@ -55,12 +62,11 @@ export default function Home() {
           ) : (
             <Text style={styles.emptyText}>Empty Directory</Text>
           )}
-          {error && <Text style={styles.errorText}>Error: {error}</Text>}
         </ImageBackground>
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -76,9 +82,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   emptyText: {
-    color: 'white',
+    color: 'black',
+    backgroundColor:'#0004',
     fontSize: 18,
     textAlign: 'center',
+    padding:10,
     marginTop: 20,
   },
   errorText: {

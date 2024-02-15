@@ -74,14 +74,11 @@ export default function Scan() {
   // function to do OCR
   const doOCR = async () => {
     console.log(imgData);
-    if (imgData != '') {
+    if (imgData !== '') {
       try {
         console.log('Before OCR' + imgData);
         const result = await TextRecognition.recognize(imgData);
         setTextResult(result);
-        const recognized = await splitText();
-        console.log(recognized);
-        navigation.navigate('Contact', recognized);
       } catch (ocrError) {
         console.error('OCR Error:', ocrError);
       } finally {
@@ -91,6 +88,24 @@ export default function Scan() {
       openFile();
     }
   };
+  
+  useEffect(() => {
+    if (textResult) {
+      (async () => {
+        try {
+          const recognized = await splitText();
+          console.log(recognized);
+          navigation.navigate('Contact', recognized);
+        } catch (error) {
+          console.error('Error processing OCR result:', error);
+        } finally {
+          console.log('Done OCR');
+        }
+      })();
+    }
+  }, [textResult]);
+  
+  
 
   // regex
   const splitText = async () => {

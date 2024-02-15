@@ -62,8 +62,8 @@ export default function Login() {
             <Button text={'Login'} onPress={handleSubmit}></Button>
           </>
         )}
-        <TouchableOpacity onPress={()=>{navigation.navigate('Register')}} style={{color:'black'}}>
-          <Text>Not a User ?</Text>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Register')}} >
+          <Text style={{color:'black'}}>Not a User ?</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

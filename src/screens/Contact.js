@@ -5,65 +5,82 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import Button from './Button';
-import {collection,doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
+import {collection, doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
 import {db} from '../firebaseConfig';
 import {DataContext} from './Context';
 
 export default function Contact({route}) {
+  console.log(route.params?.name);
   const navigation = useNavigation();
-  const [name, setName] = useState(route.params?.name);
+  const [userName, setName] = useState(route.params?.name);
   const [job, setJob] = useState(route.params?.job);
-  const [website, setWebsite] = useState(route.params?.website);
+  const [website, setWebsite] = useState(route.params?.website[0]);
   const [contact1, setContact1] = useState(route.params?.contact1);
-  const [email, setEmail] = useState(route.params?.email);
+  const [email, setEmail] = useState(route.params?.email[0]);
   const user = useContext(DataContext);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    console.log(route.params?.name);
+    setName(route.params?.name);
+    setJob(route.params?.job);
+    setWebsite(route.params?.website[0]);
+    setContact1(route.params?.contact1);
+    setEmail(route.params?.email[0]);
+  }, [route.params]);
+  
+
   const SaveData = async () => {
     const userEmail = user.email;
-    const docRef = doc(db, "users", userEmail); // docReference
-    setLoading(true)
+    const docRef = doc(db, 'users', userEmail);
+
+    setLoading(true);
+
     try {
-      const docSnap = await getDoc(docRef); //getting data
+      const docSnap = await getDoc(docRef);
+
       let contact = {
-        "name":name?name:'',
-        "job":job?job:'',
-        "website":website?website:'',
-        "contact1":contact1?contact1:'',
-        "email" : email?email:'',
-        "time": Timestamp.now()
-      }
-      
+        name: userName || 'null',
+        job: job || 'null',
+        website: website || 'null',
+        contact1: contact1 || 'null',
+        email: email || 'null',
+        time: Timestamp.now(),
+      };
+
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data()['contacts']);
-        const prevData = docSnap.data()['contacts']
-        // setDoc(doc(collection(db,'collectionName'), documentID),{key:value}
-        
-        console.log(prevData);
-        await setDoc(doc(collection(db,'users'), userEmail), {"contacts": [...prevData,contact]})
+        // console.log("Document data:", docSnap.data()['contacts']);
+        const prevData = docSnap.data()['contacts'];
+        await setDoc(doc(collection(db, 'users'), userEmail), {
+          contacts: [...prevData, contact],
+        });
       } else {
-        await setDoc(doc(collection(db,'users'), userEmail), {"contacts": [contact]});
+        await setDoc(doc(collection(db, 'users'), userEmail), {
+          contacts: [contact],
+        });
       }
       console.log('Contact Saved');
       //clear fields
-      setName('');
-      setJob('');
-      setWebsite('');
-      setContact1('');
-      setEmail('');
+      clearFields();
       navigation.navigate('Home');
     } catch (e) {
       console.error('Error adding document: ', e);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
-
+  const clearFields = () => {
+    setName('');
+    setJob('');
+    setWebsite('');
+    setContact1('');
+    setEmail('');
+  };
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
@@ -81,7 +98,7 @@ export default function Contact({route}) {
             <TextInput
               placeholder="Name"
               style={styles.inputStyle}
-              value={name}
+              value={userName}
               onChangeText={text => {
                 setName(text);
               }}
@@ -91,7 +108,7 @@ export default function Contact({route}) {
             <TextInput
               placeholder="Job"
               style={styles.inputStyle}
-              value={job ? job : ''}
+              value={job}
               onChangeText={text => {
                 setJob(text);
               }}
@@ -129,13 +146,13 @@ export default function Contact({route}) {
           </View>
         </ScrollView>
         <View style={styles.btnDiv}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <>
-            <Button text="save" icon="save" onPress={SaveData} />
-          </>
-        )}
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <>
+              <Button text="save" icon="save" onPress={SaveData} />
+            </>
+          )}
           <Button
             text="repeat"
             icon="repeat"
@@ -143,7 +160,6 @@ export default function Contact({route}) {
               navigation.navigate('Scan');
             }}
           />
-          
         </View>
       </View>
     </SafeAreaView>

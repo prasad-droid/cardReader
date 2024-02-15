@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
+import {Text} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,7 +16,6 @@ import Home from './screens/Home';
 import Contact from './screens/Contact';
 import Scan from './screens/Scan';
 import Login from './screens/login';
-import Button from './screens/Button';
 import Register from './screens/Register';
 
 // constructor( initialization )
@@ -85,7 +85,7 @@ export function MainContainer() {
           label="Logout"
           onPress={() => {
             logout();
-            navigation.closeDrawer();
+            // navigation.closeDrawer();
           }}
         />
       </DrawerContentScrollView>
