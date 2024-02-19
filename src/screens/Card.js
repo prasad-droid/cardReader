@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+
 export default function Card({Cname, email, Contact}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -60,7 +61,16 @@ export default function Card({Cname, email, Contact}) {
   };
 
   // Editing Contact
-  const EditContact = () => {
+  const EditContact = (Cname,Contact,email) => {
+    // const filtered = filteredData.filter(contact => {
+    //   return (
+    //     contact.name.toLowerCase().includes(Cname) ||
+    //     contact.email.toLowerCase().includes(Contact) ||
+    //     contact.contact1.toLowerCase().includes(email)
+    //     );
+    //   });
+    //   setFilteredData(filtered);
+    }
     
   };
 
@@ -80,14 +90,14 @@ export default function Card({Cname, email, Contact}) {
           <TouchableOpacity onPress={toggleMenu}>
             <Icon
               name={'ellipsis-vertical'}
-              style={{fontSize: 18, padding: 10}}
+              style={{fontSize: 18, padding: 10,color:'#000'}}
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              EditContact();
+              EditContact(Cname,Contact,email);
             }}>
-            <Icon name={'pen'} style={{fontSize: 18, padding: 10}} />
+            <Icon name={'pen'} style={{fontSize: 18, padding: 10,color:'#000'}} />
           </TouchableOpacity>
           {menuOpen && (
             <View style={styles.menu}>
@@ -112,7 +122,7 @@ export default function Card({Cname, email, Contact}) {
       </View>
     </TouchableWithoutFeedback>
   );
-}
+
 
 const styles = StyleSheet.create({
   card: {

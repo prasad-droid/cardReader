@@ -49,10 +49,11 @@ export default Home = () => {
 
   // function to handle Refresh
   const handleRefresh = () => {
+    setSearchInput('');
     fetchData();
   };
 
-  // function to handle SearchInput
+  // function to handle SearchInput 
   const handleSearch = () => {
     const searchTerm = searchInput.toLowerCase();
     if(searchTerm.length == 0){
