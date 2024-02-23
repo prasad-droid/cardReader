@@ -13,15 +13,39 @@ import {doc, getDoc, getDocFromCache} from 'firebase/firestore';
 import {DataContext} from './Context';
 import Card from './Card';
 import {db} from '../firebaseConfig';
+import FilterModal from './FilterModal';
 
 export default Home = () => {
   const user = useContext(DataContext);
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+  const [uniqueMonths, setUniqueMonths] = useState([]);
 
+
+  const organizeContactsByMonth = contacts => {
+    const organizedData = {};
+
+    contacts.forEach(contact => {
+      const monthYear = new Date(contact.time.toMillis()).toLocaleString(
+        'en-US',
+        {
+          month: 'long',
+          year: 'numeric',
+        },
+      );
+
+      if (!organizedData[monthYear]) {
+        organizedData[monthYear] = [];
+      }
+      organizedData[monthYear].push(contact);
+    });
+    return organizedData;
+  };
+
+  // fetching Data
   const fetchData = async () => {
     try {
       const docRef = doc(db, 'users', user.email);
@@ -29,15 +53,17 @@ export default Home = () => {
 
       if (docSnap.exists()) {
         const allContacts = docSnap.data().contacts || [];
-        console.log('Docs  :' + JSON.stringify(allContacts));
-        setFilteredData(allContacts);
+        const organizedData = organizeContactsByMonth(allContacts);
+        console.log('Docs  :' + JSON.stringify(organizedData));
+        setFilteredData(organizedData);
+        setUniqueMonths(Object.keys(organizedData))
       } else {
         console.log('No such document!');
-        setError('No data found in Firestore');
+        setError('No data found in Server');
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      setError('Error fetching data from Firestore');
+      setError('Error fetching data from Server');
     } finally {
       setLoading(false);
     }
@@ -53,25 +79,48 @@ export default Home = () => {
     fetchData();
   };
 
-  // function to handle SearchInput 
+  // function to handle SearchInput
   const handleSearch = () => {
     const searchTerm = searchInput.toLowerCase();
-    if(searchTerm.length == 0){
+    if (searchTerm.length == 0) {
       fetchData();
-    }else{
-      const filtered = filteredData.filter(contact => {
-        return (
-          contact.name.toLowerCase().includes(searchTerm) ||
-          contact.email.toLowerCase().includes(searchTerm) ||
-          contact.contact1.toLowerCase().includes(searchTerm)
-          );
-        });
-        setFilteredData(filtered);
-      }
-
+    } else {
+      const filtered = Object.fromEntries(
+        Object.entries(filteredData).map(([monthYear, contacts]) => [
+          monthYear,
+          contacts.filter(
+            contact =>
+              contact.name.toLowerCase().includes(searchTerm) ||
+              contact.email.toLowerCase().includes(searchTerm) ||
+              contact.contact1.toLowerCase().includes(searchTerm),
+          ),
+        ]),
+      );
+      setFilteredData(filtered);
+    }
   };
 
-  const handleFilter = () => {};
+  // function to handle Filter 
+  const handleFilter = () => {
+    
+    setFilterModalVisible(true);
+  };
+
+
+  const applyFilter = selectedMonth => {
+    fetchData()
+    if (selectedMonth === '') {
+      fetchData();
+    } else {
+      const filtered = {[selectedMonth]: filteredData[selectedMonth] || []};
+      setFilteredData(filtered);
+    }
+  };
+
+  const closeModal = () => {
+    setFilterModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
@@ -94,21 +143,32 @@ export default Home = () => {
             <Text style={styles.emptyText}>Loading...</Text>
           ) : error ? (
             <Text style={styles.errorText}>Error: {error}</Text>
-          ) : filteredData.length > 0 ? (
+          ) : !(filteredData.length > 0) ? (
             <ScrollView style={styles.scrollView} vertical={true}>
-              {filteredData.map((contact, index) => (
-                <Card
-                  key={index}
-                  Cname={contact.name}
-                  email={contact.email}
-                  Contact={contact.contact1}
-                />
+              {Object.entries(filteredData).map(([monthYear, contacts]) => (
+                <View key={monthYear}>
+                  <Text style={styles.monthHeader}>{monthYear}</Text>
+                  {contacts.map((contact, index) => (
+                    <Card
+                      key={index}
+                      Cname={contact.name}
+                      email={contact.email}
+                      Contact={contact.contact1}
+                    />
+                  ))}
+                </View>
               ))}
             </ScrollView>
           ) : (
             <Text style={styles.emptyText}>Empty Directory</Text>
           )}
         </ImageBackground>
+        <FilterModal
+          visible={isFilterModalVisible}
+          closeModal={closeModal}
+          applyFilter={applyFilter}
+          uniqueMonths={uniqueMonths}
+        />
       </View>
     </SafeAreaView>
   );
@@ -143,9 +203,11 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'start',
   },
   topNav: {
+    position:'fixed',
+    top:0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -156,5 +218,11 @@ const styles = StyleSheet.create({
     width: 250,
     backgroundColor: 'white',
     borderRadius: 12,
+  },
+  monthHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 10,
   },
 });

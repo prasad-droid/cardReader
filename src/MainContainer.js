@@ -80,6 +80,7 @@ export function MainContainer() {
   const DrawerContent = (props,{ navigation }) => {
     return (
       <DrawerContentScrollView {...props}>
+        <DrawerItem label={() => <Text style={{ color: '#333',fontSize:12 }}>Settings</Text>}/>
         <DrawerItemList {...props} />
         <DrawerItem
           label="Logout"
@@ -100,7 +101,9 @@ export function MainContainer() {
           <Drawer.Screen name="CX Card Scan" component={MainApp} />
           <Drawer.Screen name="Language" component={LanguageScreen} />
           <Drawer.Screen name="Rate Us On Google" component={RateUsScreen} />
-          {/* Add other drawer screens with appropriate components */}
+          <Drawer.Screen name="Contact us" component={LanguageScreen} />
+          <Drawer.Screen name="Feedback" component={LanguageScreen} />
+          <Drawer.Screen name="Share with Friends" component={LanguageScreen} />
         </Drawer.Navigator>
       ) : (
         <Stack.Navigator>

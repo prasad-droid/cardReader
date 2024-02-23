@@ -71,58 +71,59 @@ export default function Card({Cname, email, Contact}) {
     //   });
     //   setFilteredData(filtered);
     }
-    
+    return (
+      <TouchableWithoutFeedback onPress={closeMenu}>
+        <View style={styles.card}>
+          <View style={styles.contentContainer}>
+            <Image
+              source={require('../assets/Profileicon.png')}
+              style={styles.image}
+            />
+            <View style={styles.content}>
+              <Text style={styles.text}>Name: {Cname}</Text>
+              <Text style={styles.text}>Contact: {Contact}</Text>
+              <Text style={styles.text}>Email: {email}</Text>
+            </View>
+            <TouchableOpacity onPress={toggleMenu}>
+              <Icon
+                name={'ellipsis-vertical'}
+                style={{fontSize: 18, padding: 10,color:'#000'}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                EditContact(Cname,Contact,email);
+              }}>
+              <Icon name={'pen'} style={{fontSize: 18, padding: 10,color:'#000'}} />
+            </TouchableOpacity>
+            {menuOpen && (
+              <View style={styles.menu}>
+                <TouchableOpacity onPress={() => makeCall(Contact)}>
+                  <Text style={styles.menuItem}>Call</Text>
+                </TouchableOpacity>
+  
+                <TouchableOpacity onPress={() => whatsappMsg(Contact)}>
+                  <Text style={styles.menuItem}>WhatsApp</Text>
+                </TouchableOpacity>
+  
+                <TouchableOpacity onPress={() => sendEmail(email)}>
+                  <Text style={styles.menuItem}>Email</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => shareContact(Cname, Contact, email)}>
+                  <Text style={styles.menuItem}>Share</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
   };
 
-  return (
-    <TouchableWithoutFeedback onPress={closeMenu}>
-      <View style={styles.card}>
-        <View style={styles.contentContainer}>
-          <Image
-            source={require('../assets/Profileicon.png')}
-            style={styles.image}
-          />
-          <View style={styles.content}>
-            <Text style={styles.text}>Name: {Cname}</Text>
-            <Text style={styles.text}>Contact: {Contact}</Text>
-            <Text style={styles.text}>Email: {email}</Text>
-          </View>
-          <TouchableOpacity onPress={toggleMenu}>
-            <Icon
-              name={'ellipsis-vertical'}
-              style={{fontSize: 18, padding: 10,color:'#000'}}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              EditContact(Cname,Contact,email);
-            }}>
-            <Icon name={'pen'} style={{fontSize: 18, padding: 10,color:'#000'}} />
-          </TouchableOpacity>
-          {menuOpen && (
-            <View style={styles.menu}>
-              <TouchableOpacity onPress={() => makeCall(Contact)}>
-                <Text style={styles.menuItem}>Call</Text>
-              </TouchableOpacity>
+  
 
-              <TouchableOpacity onPress={() => whatsappMsg(Contact)}>
-                <Text style={styles.menuItem}>WhatsApp</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => sendEmail(email)}>
-                <Text style={styles.menuItem}>Email</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => shareContact(Cname, Contact, email)}>
-                <Text style={styles.menuItem}>Share</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-
+  
 
 const styles = StyleSheet.create({
   card: {
