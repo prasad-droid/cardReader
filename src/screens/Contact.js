@@ -11,6 +11,8 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import Button from './Button';
 import {collection, doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 import {db} from '../firebaseConfig';
 import {DataContext} from './Context';
 
@@ -45,6 +47,7 @@ export default function Contact({route}) {
       const docSnap = await getDoc(docRef);
 
       let contact = {
+        id : uuidv4(),
         name: userName || 'null',
         job: job || 'null',
         website: website || 'null',

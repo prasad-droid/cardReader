@@ -81,6 +81,7 @@ export default Home = () => {
 
   // function to handle SearchInput
   const handleSearch = () => {
+    fetchData()
     const searchTerm = searchInput.toLowerCase();
     if (searchTerm.length == 0) {
       fetchData();
@@ -131,6 +132,7 @@ export default Home = () => {
           <View style={styles.topNav}>
             <TextInput
               style={styles.searchInput}
+              placeholderTextColor="#000" 
               placeholder="Search..."
               value={searchInput}
               onChangeText={text => setSearchInput(text)}

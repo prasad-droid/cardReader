@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   monthText: {
     fontSize: 16,
+    color:'#000'
   },
   applyButton: {
     backgroundColor: '#3498db',
