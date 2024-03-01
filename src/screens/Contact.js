@@ -6,36 +6,47 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import Button from './Button';
 import {collection, doc, getDoc, setDoc, Timestamp} from 'firebase/firestore';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {db} from '../firebaseConfig';
 import {DataContext} from './Context';
+import {AddressModal} from './Modal';
 
 export default function Contact({route}) {
-  console.log(route.params?.name);
   const navigation = useNavigation();
   const [userName, setName] = useState(route.params?.name);
   const [job, setJob] = useState(route.params?.job);
   const [website, setWebsite] = useState(route.params?.website[0]);
   const [contact1, setContact1] = useState(route.params?.contact1);
   const [email, setEmail] = useState(route.params?.email[0]);
+  const [address, setAddress] = useState(route.params?.address||[]);
+  const [addressModalVisible, setAddressModalVisible] = useState(false);
   const user = useContext(DataContext);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(route.params?.name);
     setName(route.params?.name);
     setJob(route.params?.job);
     setWebsite(route.params?.website[0]);
     setContact1(route.params?.contact1);
     setEmail(route.params?.email[0]);
+    setAddress(route.params?.address);
   }, [route.params]);
-  
+
+  const closeModal = () => {
+    setAddressModalVisible(false);
+  };
+
+  const applyAddress = add =>{
+    setAddress(add)
+    closeModal();
+  }
 
   const SaveData = async () => {
     const userEmail = user.email;
@@ -47,7 +58,7 @@ export default function Contact({route}) {
       const docSnap = await getDoc(docRef);
 
       let contact = {
-        id : uuidv4(),
+        id: uuidv4(),
         name: userName || 'null',
         job: job || 'null',
         website: website || 'null',
@@ -100,6 +111,7 @@ export default function Contact({route}) {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="Name"
+              placeholderTextColor={'#000'}
               style={styles.inputStyle}
               value={userName}
               onChangeText={text => {
@@ -110,6 +122,7 @@ export default function Contact({route}) {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="Job"
+              placeholderTextColor={'#000'}
               style={styles.inputStyle}
               value={job}
               onChangeText={text => {
@@ -120,6 +133,7 @@ export default function Contact({route}) {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="website "
+              placeholderTextColor={'#000'}
               style={styles.inputStyle}
               value={website ? website : ''}
               onChangeText={text => {
@@ -130,6 +144,7 @@ export default function Contact({route}) {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="Contact 1"
+              placeholderTextColor={'#000'}
               style={styles.inputStyle}
               value={contact1}
               onChangeText={text => {
@@ -140,11 +155,24 @@ export default function Contact({route}) {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="Email"
+              placeholderTextColor={'#000'}
               style={styles.inputStyle}
               value={email}
               onChangeText={text => {
                 setEmail(text);
               }}
+            />
+          </View>
+          <View style={styles.inputBox}>
+            <Button
+              text="Address Modal"
+              onPress={() => setAddressModalVisible(true)}
+            />
+            <AddressModal
+              isVisible={addressModalVisible}
+              add = {address}
+              onClose={closeModal}
+              onSave={applyAddress}
             />
           </View>
         </ScrollView>

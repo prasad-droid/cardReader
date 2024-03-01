@@ -13,7 +13,7 @@ import {doc, getDoc, getDocFromCache} from 'firebase/firestore';
 import {DataContext} from './Context';
 import Card from './Card';
 import {db} from '../firebaseConfig';
-import FilterModal from './FilterModal';
+import {FilterModal} from './Modal';
 
 export default Home = () => {
   const user = useContext(DataContext);
