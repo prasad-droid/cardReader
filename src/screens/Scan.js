@@ -12,8 +12,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import addressit from 'addressit';
-import XRegExp from 'xregexp';
-
+import Icon from 'react-native-vector-icons/FontAwesome6'
 export default function Scan() {
   const navigation = useNavigation();
 
@@ -161,12 +160,12 @@ export default function Scan() {
     <View style={{flex: 1}}>
       {takePhotoClicked ? (
         <View style={{flex: 1}}>
-          {/* <View>
+          <View>
         <TouchableOpacity style={styles.button} onPress={onFlashPressed} disabledOpacity={0.4}>
-             <IonIcon name={flash === 'on' ? 'flash' : 'flash-off'} color="black" size={40} />
+             <Icon name={flash === 'on' ? 'bolt' : 'ban'} color="black" size={28} />
             <Text> Flash </Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
           <Camera
             ref={cameraRef}
             style={styles.camera}
