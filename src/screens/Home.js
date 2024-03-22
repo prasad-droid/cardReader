@@ -54,7 +54,7 @@ export default Home = () => {
       if (docSnap.exists()) {
         const allContacts = docSnap.data().contacts || [];
         const organizedData = organizeContactsByMonth(allContacts);
-        console.log('Docs  :' + JSON.stringify(organizedData));
+        // console.log('Docs  :' + JSON.stringify(organizedData));
         setFilteredData(organizedData);
         setUniqueMonths(Object.keys(organizedData))
       } else {
@@ -71,7 +71,7 @@ export default Home = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filteredData]);
 
   // function to handle Refresh
   const handleRefresh = () => {
@@ -103,7 +103,6 @@ export default Home = () => {
 
   // function to handle Filter 
   const handleFilter = () => {
-    
     setFilterModalVisible(true);
   };
 
@@ -145,7 +144,7 @@ export default Home = () => {
             <Text style={styles.emptyText}>Loading...</Text>
           ) : error ? (
             <Text style={styles.errorText}>Error: {error}</Text>
-          ) : !(filteredData.length > 0) ? (
+          ) : (!filteredData.length > 0) ? (
             <ScrollView style={styles.scrollView} vertical={true}>
               {Object.entries(filteredData).map(([monthYear, contacts]) => (
                 <View key={monthYear}>
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   emptyText: {
-    color: 'black',
+    color: 'white',
     backgroundColor: '#0004',
     fontSize: 18,
     textAlign: 'center',

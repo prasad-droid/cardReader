@@ -17,6 +17,7 @@ import Contact from './screens/Contact';
 import Scan from './screens/Scan';
 import Login from './screens/login';
 import Register from './screens/Register';
+import EditScreen from './screens/EditScreen';
 
 // constructor( initialization )
 const auth = FIREBASE_AUTH;
@@ -104,6 +105,7 @@ export function MainContainer() {
           <Drawer.Screen name="Contact us" component={LanguageScreen} />
           <Drawer.Screen name="Feedback" component={LanguageScreen} />
           <Drawer.Screen name="Share with Friends" component={LanguageScreen} />
+          <Drawer.Screen name="EditScreen" component={EditScreen} options={{ drawerItemStyle:{display:'none'}}} />
         </Drawer.Navigator>
       ) : (
         <Stack.Navigator>

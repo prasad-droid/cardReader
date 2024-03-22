@@ -1,6 +1,5 @@
 import {MainContainer} from "./src/MainContainer";
-import Register from "./src/screens/Register";
-import Login from "./src/screens/login";
+import EditScreen from "./src/screens/EditScreen";
 
 
 export default function App() {

@@ -10,10 +10,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Card({Cname, email, Contact}) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  
+  const navigation = useNavigation();
   // function to make call
   const makeCall = number => {
     if (typeof number != 'string') {
@@ -51,30 +52,20 @@ export default function Card({Cname, email, Contact}) {
     });
   };
 
-  const toggleMenu = () => {
-    console.log('clicked');
-    setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  // Editing Contact
-  const EditContact = (Cname,Contact,email) => {
-    // const filtered = filteredData.filter(contact => {
-    //   return (
-    //     contact.name.toLowerCase().includes(Cname) ||
-    //     contact.email.toLowerCase().includes(Contact) ||
-    //     contact.contact1.toLowerCase().includes(email)
-    //     );
-    //   });
-    //   setFilteredData(filtered);
-    }
-    return (
-      <TouchableWithoutFeedback onPress={closeMenu}>
-        <View style={styles.card}>
-          <View style={styles.contentContainer}>
+  const Edit = ()=>{
+    navigation.navigate("EditScreen",{name:Cname,contact:Contact,email:email})
+  }
+  return (
+    <TouchableWithoutFeedback onPress={Edit}>
+      <View style={styles.card}>
+        <View style={styles.contentContainer}>
+          {/* details Container */}
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
             <Image
               source={require('../assets/Profileicon.png')}
               style={styles.image}
@@ -84,46 +75,46 @@ export default function Card({Cname, email, Contact}) {
               <Text style={styles.text}>Contact: {Contact}</Text>
               <Text style={styles.text}>Email: {email}</Text>
             </View>
-            <TouchableOpacity onPress={toggleMenu}>
-              <Icon
-                name={'ellipsis-vertical'}
-                style={{fontSize: 18, padding: 10,color:'#000'}}
-              />
+          </View>
+          {/* buttons Container */}
+          <View style={{flexDirection: 'column'}}>
+            <TouchableOpacity
+              onPress={()=>{makeCall(Contact)}}
+              style={{
+                borderRadius: 50,
+                backgroundColor: '#FA6E6E',
+                padding: 5,
+                marginBottom: 5,
+              }}>
+              <Icon name="phone" size={10} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {
-                EditContact(Cname,Contact,email);
+            onPress={()=>{whatsappMsg(Contact)}}
+              style={{
+                borderRadius: 50,
+                backgroundColor: '#12CD7E',
+                padding: 5,
+                marginBottom: 5,
               }}>
-              <Icon name={'pen'} style={{fontSize: 18, padding: 10,color:'#000'}} />
+              <Icon name="whatsapp" size={10} color="white" />
             </TouchableOpacity>
-            {menuOpen && (
-              <View style={styles.menu}>
-                <TouchableOpacity onPress={() => makeCall(Contact)}>
-                  <Text style={styles.menuItem}>Call</Text>
-                </TouchableOpacity>
-  
-                <TouchableOpacity onPress={() => whatsappMsg(Contact)}>
-                  <Text style={styles.menuItem}>WhatsApp</Text>
-                </TouchableOpacity>
-  
-                <TouchableOpacity onPress={() => sendEmail(email)}>
-                  <Text style={styles.menuItem}>Email</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => shareContact(Cname, Contact, email)}>
-                  <Text style={styles.menuItem}>Share</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <TouchableOpacity
+            onPress={()=>{shareContact(Cname, Contact, email)}}
+              style={{
+                borderRadius: 50,
+                backgroundColor: '#144878',
+                padding: 5,
+                marginBottom: 5,
+              }}>
+              <Icon name="share-nodes" size={10} color="white" />
+            </TouchableOpacity>
           </View>
+          
         </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  
-
-  
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
 
 const styles = StyleSheet.create({
   card: {
@@ -138,10 +129,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     borderRadius: 10,
   },
   content: {
