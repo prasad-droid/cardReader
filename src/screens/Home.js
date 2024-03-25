@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TextInput,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import Button from './Button';
 import {doc, getDoc, getDocFromCache} from 'firebase/firestore';
@@ -124,10 +125,6 @@ export default Home = () => {
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
-        <ImageBackground
-          source={require('../assets/appicon.png')}
-          resizeMode="contain"
-          style={styles.image}>
           <View style={styles.topNav}>
             <TextInput
               style={styles.searchInput}
@@ -161,9 +158,16 @@ export default Home = () => {
               ))}
             </ScrollView>
           ) : (
-            <Text style={styles.emptyText}>Empty Directory</Text>
+            <Image
+            source={require('../assets/No result.png')}
+            style={{
+              width: 200,
+              height: 200,
+              alignSelf: 'center',
+              objectFit: 'contain',
+            }}
+          />
           )}
-        </ImageBackground>
         <FilterModal
           visible={isFilterModalVisible}
           closeModal={closeModal}
@@ -178,14 +182,13 @@ export default Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#333',
+    backgroundColor:'#fff'
   },
   main: {
     flexDirection: 'column',
     flex: 1,
   },
   scrollView: {
-    backgroundColor: '#00000070',
     paddingHorizontal: 10,
   },
   emptyText: {
@@ -213,17 +216,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor:'#fff',
   },
   searchInput: {
     color: 'black',
     width: 250,
-    backgroundColor: 'white',
-    borderRadius: 12,
+    borderColor:'blue',
+    borderBottomWidth:2,
   },
   monthHeader: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 10,
+    color: 'black',
+    margin: 10,
   },
 });

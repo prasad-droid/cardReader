@@ -207,6 +207,7 @@ export default function EditScreen({route}) {
         </View>
         <ScrollView>
           <View style={styles.inputBox}>
+          <Icon name="circle-user" style={styles.Icon} />
             <TextInput
               placeholder="Name"
               placeholderTextColor={'#000'}
@@ -218,6 +219,7 @@ export default function EditScreen({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+          <Icon name='building-un' style={styles.Icon} />
             <TextInput
               placeholder="Job"
               placeholderTextColor={'#000'}
@@ -229,6 +231,7 @@ export default function EditScreen({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+          <Icon name='globe' style={styles.Icon} />
             <TextInput
               placeholder="website "
               placeholderTextColor={'#000'}
@@ -240,6 +243,7 @@ export default function EditScreen({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+          <Icon name='phone' style={styles.Icon} />
             <TextInput
               placeholder="Contact 1"
               placeholderTextColor={'#000'}
@@ -251,6 +255,7 @@ export default function EditScreen({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+          <Icon name='envelope' style={styles.Icon} />
             <TextInput
               placeholder="Email"
               placeholderTextColor={'#000'}
@@ -262,6 +267,7 @@ export default function EditScreen({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+          <Icon name='house' style={styles.Icon} />
             <TextInput
               placeholder="Address"
               placeholderTextColor={'#000'}
@@ -297,10 +303,11 @@ const styles = StyleSheet.create({
   main: {
     flexDirection: 'column',
     flex: 1,
+    backgroundColor:'#fff'
   },
   container: {
     flex: 1,
-    backgroundColor: '#333',
+    backgroundColor: '#fff',
   },
   inputStyle: {
     color: '#000',
@@ -310,7 +317,14 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     borderRadius: 10,
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#EDEDED',
+    borderColor:'#449AE9',
+    borderWidth:2
+  },
+  Icon: {
+    fontSize: 20,
+    color: '#449AE9',
+    marginTop:18
   },
   inputBox: {
     flexDirection: 'row',

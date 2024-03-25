@@ -53,7 +53,7 @@ export default function Card({Cname, email, Contact}) {
   };
 
   const Edit = ()=>{
-    navigation.navigate("EditScreen",{name:Cname,contact:Contact,email:email})
+    navigation.navigate("Edit",{name:Cname,contact:Contact,email:email})
   }
   return (
     <TouchableWithoutFeedback onPress={Edit}>
@@ -119,7 +119,7 @@ export default function Card({Cname, email, Contact}) {
 const styles = StyleSheet.create({
   card: {
     padding: 10,
-    backgroundColor: '#eee',
+    backgroundColor: '#E4E4E4',
     margin: 10,
     borderRadius: 10,
     flexDirection: 'column',
@@ -156,7 +156,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   text: {
-    color: '#000',
+    color: 'black',
+    flex:1,
     textTransform: 'capitalize',
   },
 });

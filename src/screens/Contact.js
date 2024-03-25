@@ -17,6 +17,7 @@ import {v4 as uuidv4} from 'uuid';
 import {db} from '../firebaseConfig';
 import {DataContext} from './Context';
 import {AddressModal} from './Modal';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 export default function Contact({route}) {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ export default function Contact({route}) {
   const [website, setWebsite] = useState(route.params?.website[0]);
   const [contact1, setContact1] = useState(route.params?.contact1);
   const [email, setEmail] = useState(route.params?.email[0]);
-  const [address, setAddress] = useState(route.params?.address||[]);
+  const [address, setAddress] = useState(route.params?.address || []);
   const [addressModalVisible, setAddressModalVisible] = useState(false);
   const user = useContext(DataContext);
   const [loading, setLoading] = useState(false);
@@ -43,10 +44,10 @@ export default function Contact({route}) {
     setAddressModalVisible(false);
   };
 
-  const applyAddress = add =>{
-    setAddress(add)
+  const applyAddress = add => {
+    setAddress(add);
     closeModal();
-  }
+  };
 
   const SaveData = async () => {
     const userEmail = user.email;
@@ -109,6 +110,7 @@ export default function Contact({route}) {
         />
         <ScrollView>
           <View style={styles.inputBox}>
+            <Icon name="circle-user" style={styles.Icon} />
             <TextInput
               placeholder="Name"
               placeholderTextColor={'#000'}
@@ -119,7 +121,8 @@ export default function Contact({route}) {
               }}
             />
           </View>
-          <View style={styles.inputBox}>
+          {/* <View style={styles.inputBox}>
+          <Icon name='building-un' style={styles.Icon} />
             <TextInput
               placeholder="Job"
               placeholderTextColor={'#000'}
@@ -129,8 +132,9 @@ export default function Contact({route}) {
                 setJob(text);
               }}
             />
-          </View>
+          </View> */}
           <View style={styles.inputBox}>
+            <Icon name="globe" style={styles.Icon} />
             <TextInput
               placeholder="website "
               placeholderTextColor={'#000'}
@@ -142,6 +146,7 @@ export default function Contact({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+            <Icon name="phone" style={styles.Icon} />
             <TextInput
               placeholder="Contact 1"
               placeholderTextColor={'#000'}
@@ -153,6 +158,7 @@ export default function Contact({route}) {
             />
           </View>
           <View style={styles.inputBox}>
+            <Icon name="envelope" style={styles.Icon} />
             <TextInput
               placeholder="Email"
               placeholderTextColor={'#000'}
@@ -170,7 +176,7 @@ export default function Contact({route}) {
             />
             <AddressModal
               isVisible={addressModalVisible}
-              add = {address}
+              add={address}
               onClose={closeModal}
               onSave={applyAddress}
             />
@@ -201,10 +207,11 @@ const styles = StyleSheet.create({
   main: {
     flexDirection: 'column',
     flex: 1,
+    backgroundColor:'#fff'
   },
   container: {
     flex: 1,
-    backgroundColor: '#333',
+    backgroundColor: '#fff',
   },
   inputStyle: {
     color: '#000',
@@ -214,7 +221,14 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     borderRadius: 10,
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#EDEDED',
+    borderColor:'#449AE9',
+    borderWidth:2
+  },
+  Icon: {
+    fontSize: 20,
+    color: '#449AE9',
+    marginTop:18
   },
   inputBox: {
     flexDirection: 'row',
